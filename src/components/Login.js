@@ -1,0 +1,168 @@
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Formik, Form } from 'formik';
+import * as Yup from 'yup';
+import {
+    TextField,
+    Button,
+    Container,
+    Typography,
+    Box,
+    Link,
+    Card,
+    FormLabel
+} from '@mui/material';
+import { useAuth } from '../contexts/AuthContext';
+
+// Validation schema for Formik
+const validationSchema = Yup.object().shape({
+    email: Yup.string().email('Invalid email format').required('Email is required'),
+    password: Yup.string().required('Password is required'),
+});
+
+const Login = () => {
+    const navigate = useNavigate();
+    const { login } = useAuth();
+
+    // Handle form submission
+    const handleSubmit = (values, { setSubmitting }) => {
+        // Simulate an API call
+        setTimeout(() => {
+            login(values);
+            navigate('/');
+            setSubmitting(false);
+        }, 1000);
+    };
+
+    return (
+        <Container maxWidth="xs">
+            <Box
+                sx={{
+                    mt: 8,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center'
+                }}
+            >
+                <Card
+                    sx={{
+                        padding: '24px',
+                        borderRadius: '12px',
+                        boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)'
+                    }}
+                >
+                    <Typography
+                        component="h1"
+                        variant="h5"
+                        sx={{
+                            width: '100%',
+                            fontSize: 'clamp(1.75rem, 8vw, 2rem)',
+                            mb: 2
+                        }}
+                    >
+                        Sign in
+                    </Typography>
+
+                    <Formik
+                        initialValues={{ email: '', password: '' }}
+                        validationSchema={validationSchema}
+                        onSubmit={handleSubmit}
+                    >
+                        {({ errors, touched, isSubmitting }) => (
+                            <Form>
+                                {/* Email Field */}
+                                <Box sx={{ mb: 2 }}>
+                                    <FormLabel htmlFor="email">Email Address</FormLabel>
+                                    <TextField
+                                        name="email"
+                                        placeholder="your@email.com"
+                                        fullWidth
+                                        margin="normal"
+                                        error={touched.email && !!errors.email}
+                                        helperText={touched.email && errors.email}
+                                        InputProps={{
+                                            style: { padding: '8px', fontSize: '14px' }
+                                        }}
+                                        sx={{
+                                            maxWidth: '300px',
+                                            width: '100%',
+                                            height: '35px',
+                                            '& .MuiOutlinedInput-root': {
+                                                height: '100%',
+                                                '& input': {
+                                                    padding: '8px',
+                                                    boxSizing: 'border-box',
+                                                    height: '100%'
+                                                },
+                                                '& fieldset': {
+                                                    borderRadius: '8px'
+                                                }
+                                            }
+                                        }}
+                                    />
+                                </Box>
+
+                                {/* Password Field */}
+                                <Box sx={{ mb: 2 }}>
+                                    <FormLabel htmlFor="password">Password</FormLabel>
+                                    <TextField
+                                        name="password"
+                                        placeholder="●●●●●●●"
+                                        type="password"
+                                        fullWidth
+                                        margin="normal"
+                                        error={touched.password && !!errors.password}
+                                        helperText={touched.password && errors.password}
+                                        InputProps={{
+                                            style: { padding: '8px', fontSize: '14px' }
+                                        }}
+                                        sx={{
+                                            maxWidth: '300px',
+                                            width: '100%',
+                                            height: '35px',
+                                            '& .MuiOutlinedInput-root': {
+                                                height: '100%',
+                                                '& input': {
+                                                    padding: '8px',
+                                                    boxSizing: 'border-box',
+                                                    height: '100%'
+                                                },
+                                                '& fieldset': {
+                                                    borderRadius: '8px'
+                                                }
+                                            }
+                                        }}
+                                    />
+                                </Box>
+
+                                {/* Submit Button */}
+                                <Button
+                                    type="submit"
+                                    fullWidth
+                                    variant="contained"
+                                    sx={{ mt: 2, mb: 2, borderRadius: '8px', padding: '10px' }}
+                                    disabled={isSubmitting}
+                                >
+                                    Sign in
+                                </Button>
+                            </Form>
+                        )}
+                    </Formik>
+
+                    {/* Sign-up Link */}
+                    <Typography
+                        variant="body2"
+                        sx={{ mt: 2, textAlign: 'center' }}
+                    >
+                        Don't have an account? <Link href="/register">Register</Link>
+                    </Typography>
+
+                    {/* Social Login Buttons (Optional) */}
+                    {/* Add Google and Facebook login buttons here if needed */}
+                </Card>
+            </Box>
+        </Container>
+    );
+};
+
+export default Login;
