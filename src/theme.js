@@ -3,24 +3,24 @@ import { createTheme } from '@mui/material/styles';
 const theme = createTheme({
     palette: {
         primary: {
-            main: '#BFD9E8',  // Soft Blue for primary elements (relaxing and calming)
+            main: '#D4B99A',  // Beige for primary elements (warm and neutral)
         },
         secondary: {
-            main: '#A1C4E9',  // Light Blue for secondary elements (complementary to primary)
+            main: '#F0E5D8',  // Light beige for secondary elements (complementary to primary)
         },
         background: {
-            default: '#F0F4F8',  // Very light grayish-blue background for the app (soothing and neutral)
-            paper: '#FFFFFF',  // White background for paper/card elements (clean and fresh)
+            default: '#FAF9F6',  // Very light beige background for the app (soft and neutral)
+            paper: '#FFFFFF',    // White background for paper/card elements (clean and fresh)
         },
         error: {
-            main: '#F76C6C',  // Soft red for error, still gentle
+            main: '#E57373',  // Soft red for error (gentle and noticeable)
         },
         success: {
-            main: '#4CAF50',  // Green for success, natural and calming
+            main: '#81C784',  // Green for success (natural and calming)
         },
         text: {
-            primary: '#333333',  // Dark gray for primary text, ensures readability
-            secondary: '#555555',  // Medium gray for secondary text, softer than black
+            primary: '#4A4A4A',  // Dark gray for primary text (good readability)
+            secondary: '#6D6D6D',  // Medium gray for secondary text (softer than black)
         },
     },
     typography: {
@@ -28,16 +28,16 @@ const theme = createTheme({
         h1: {
             fontSize: '2rem',
             fontWeight: 600,
-            color: '#333333',  // Dark gray for h1 headers
+            color: '#4A4A4A',  // Dark gray for h1 headers
         },
         h2: {
             fontSize: '1.5rem',
             fontWeight: 500,
-            color: '#333333',  // Dark gray for h2 headers
+            color: '#4A4A4A',  // Dark gray for h2 headers
         },
         body1: {
             fontSize: '1rem',
-            color: '#333333',  // Dark gray for body text
+            color: '#4A4A4A',  // Dark gray for body text
         },
         button: {
             textTransform: 'none',
@@ -60,15 +60,15 @@ const theme = createTheme({
                     padding: '8px 16px',
                 },
                 containedPrimary: {
-                    backgroundColor: '#BFD9E8',  // Soft blue for primary buttons
+                    backgroundColor: '#D4B99A',  // Beige for primary buttons
                     '&:hover': {
-                        backgroundColor: '#A1C4E9',  // Slightly darker blue on hover
+                        backgroundColor: '#B89C81',  // Slightly darker beige on hover
                     },
                 },
                 containedSecondary: {
-                    backgroundColor: '#A1C4E9',  // Light blue for secondary buttons
+                    backgroundColor: '#F0E5D8',  // Light beige for secondary buttons
                     '&:hover': {
-                        backgroundColor: '#8CB3D0',  // Slightly darker blue on hover
+                        backgroundColor: '#D1C4A9',  // Slightly darker beige on hover
                     },
                 },
             },
@@ -94,7 +94,7 @@ const theme = createTheme({
         MuiAppBar: {
             styleOverrides: {
                 root: {
-                    backgroundColor: '#BFD9E8',  // Soft blue for AppBar background
+                    backgroundColor: '#D4B99A',  // Beige for AppBar background
                 },
             },
         },
