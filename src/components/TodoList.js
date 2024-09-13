@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
-    Container, Typography, List, ListItem, ListItemText,
-    ListItemSecondaryAction, IconButton,ListItemIcon, Button, Box
+    Container, Typography,MenuItem,FormControl,Select, List, ListItem, ListItemText,
+    ListItemSecondaryAction, IconButton, ListItemIcon, Button, Box, InputLabel
 } from '@mui/material';
 import { Delete, Edit, CheckBox, CheckBoxOutlineBlank } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
@@ -9,9 +9,11 @@ import AddTodoModal from './AddToDoModal';
 import EditTodoModal from './EditTodoModal'; // Import the new EditTodoModal
 import { useTheme } from '@mui/material/styles';
 
+
 const TodoList = () => {
     const [todos, setTodos] = useState([]);
     const [newTodo, setNewTodo] = useState({ title: '', description: '', priority: 'Medium', date: new Date() });
+    const [filterPriority, setFilterPriority] = useState('All'); // State for filtering by priority
     const [editingTodo, setEditingTodo] = useState(null);
     const [openAddModal, setOpenAddModal] = useState(false);
     const [openEditModal, setOpenEditModal] = useState(false); // State for Edit Modal
@@ -61,6 +63,9 @@ const TodoList = () => {
     const handleOpenAddModal = () => setOpenAddModal(true);
     const handleCloseAddModal = () => setOpenAddModal(false);
     const handleCloseEditModal = () => setOpenEditModal(false);
+    const filteredTodos = filterPriority === 'All'
+        ? todos
+        : todos.filter(todo => todo.priority === filterPriority);
 
     return (
         <Container>
@@ -114,8 +119,28 @@ const TodoList = () => {
                     >
                         Add Task
                     </Button>
-                </Box>
 
+                </Box>
+                <Box sx={{ marginLeft: 2 }}>
+                    <FormControl>
+                        <InputLabel id="filter-label">Filter by Priority</InputLabel>
+                        <Select
+                            labelId="filter-label"
+                            value={filterPriority}
+                            onChange={(e) => setFilterPriority(e.target.value)}
+                            label="Filter by Priority"
+                            sx={{
+                                width: 200,
+                                backgroundColor: theme.palette.background.paper,
+                            }}
+                        >
+                            <MenuItem value="All">All</MenuItem>
+                            <MenuItem value="High">High</MenuItem>
+                            <MenuItem value="Medium">Medium</MenuItem>
+                            <MenuItem value="Low">Low</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Box>
             </Box>
 
             {/* Scrollable Todo List */}
@@ -133,7 +158,7 @@ const TodoList = () => {
             >
                 <List    sx={{   padding:4}} >
 
-                    {todos.map((todo) => (
+                    {filteredTodos.map((todo) => (
                         <ListItem
 
                             key={todo.id}
@@ -148,7 +173,13 @@ const TodoList = () => {
                                     borderBottom: 'none'
                                 },
                                 borderRadius: '10px',
-                                bgcolor: todo.completed ? theme.palette.action.disabledBackground : theme.palette.primary.main,
+                                bgcolor: todo.completed
+                                    ? theme.palette.text.secondary // Use a consistent color for completed tasks
+                                    : todo.priority === 'High'
+                                        ? theme.palette.error.main // Red for high-priority tasks
+                                        : todo.priority === 'Medium'
+                                            ? theme.palette.warning.main // Orange for medium-priority tasks
+                                            : theme.palette.success.main, // Green for low-priority tasks
                                 transition: 'background-color 0.3s ease',
                                 '&:hover': {
                                     bgcolor: theme.palette.action.hover,
@@ -165,7 +196,7 @@ const TodoList = () => {
                                     flexDirection: 'column',      // Stacks vertically first
                                 }}
                                 primary={
-                                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center',marginRight:4 }}>
                                         <Typography variant="body1" sx={{ color: theme.palette.text.primary }}>
                                            {todo.title} {/* Title on the left */}
                                         </Typography>
@@ -175,7 +206,7 @@ const TodoList = () => {
                                     </Box>
                                 }
                                 secondary={
-                                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 1 }}>
+                                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 1,marginRight:4 }}>
                                         <Typography variant="body2" sx={{ color: theme.palette.text.secondary }}>
                                             {todo.description} {/* Description on the left */}
                                         </Typography>
