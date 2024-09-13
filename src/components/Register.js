@@ -13,20 +13,20 @@ const validationSchema = Yup.object().shape({
 
 const Register = () => {
     const navigate = useNavigate();
-    const { login } = useAuth();
+    const { register } = useAuth();
 
     const handleSubmit = (values, { setSubmitting }) => {
         // Simulate API call
         setTimeout(() => {
-            login(values);
-            navigate('/');
+            register(values);
+            navigate('/login');
             setSubmitting(false);
         }, 1000);
     };
 
     return (
         <Container maxWidth="xs">
-            <Box sx={{ mt: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 {/* Card Wrapper */}
                 <Card sx={{ padding: '24px', borderRadius: '12px', boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)' }}>
                     <Typography component="h1" variant="h5" sx={{ width: '100%', fontSize: 'clamp(1.75rem, 8vw, 2rem)', mb: 2 }}>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Formik, Form } from 'formik';
+import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import {
     TextField,
@@ -28,8 +28,12 @@ const Login = () => {
     const handleSubmit = (values, { setSubmitting }) => {
         // Simulate an API call
         setTimeout(() => {
-            login(values);
-            navigate('/');
+            const success = login(values);
+            if (success) {
+                navigate('/');
+            } else {
+                alert('Invalid credentials');
+            }
             setSubmitting(false);
         }, 1000);
     };
@@ -68,16 +72,17 @@ const Login = () => {
                         validationSchema={validationSchema}
                         onSubmit={handleSubmit}
                     >
-                        {({ errors, touched, isSubmitting }) => (
+                        {({ errors, touched, isSubmitting, handleChange, handleBlur, values }) => (
                             <Form>
                                 {/* Email Field */}
                                 <Box sx={{ mb: 2 }}>
                                     <FormLabel htmlFor="email">Email Address</FormLabel>
-                                    <TextField
+                                    <Field
+                                        as={TextField}
                                         name="email"
-                                        placeholder="your@email.com"
                                         fullWidth
                                         margin="normal"
+                                        placeholder="your@email.com"
                                         error={touched.email && !!errors.email}
                                         helperText={touched.email && errors.email}
                                         InputProps={{
@@ -105,10 +110,11 @@ const Login = () => {
                                 {/* Password Field */}
                                 <Box sx={{ mb: 2 }}>
                                     <FormLabel htmlFor="password">Password</FormLabel>
-                                    <TextField
+                                    <Field
+                                        as={TextField}
                                         name="password"
-                                        placeholder="●●●●●●●"
                                         type="password"
+                                        placeholder="●●●●●●●"
                                         fullWidth
                                         margin="normal"
                                         error={touched.password && !!errors.password}
@@ -156,9 +162,6 @@ const Login = () => {
                     >
                         Don't have an account? <Link href="/register">Register</Link>
                     </Typography>
-
-                    {/* Social Login Buttons (Optional) */}
-                    {/* Add Google and Facebook login buttons here if needed */}
                 </Card>
             </Box>
         </Container>
