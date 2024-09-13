@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-    Container, Typography, MenuItem, FormControl, Select, List, ListItem, ListItemText,
+    Container, Typography, MenuItem, FormControl, Select, Tooltip ,List, ListItem, ListItemText,
     ListItemSecondaryAction, IconButton, ListItemIcon, Button, Box, InputLabel, FormLabel
 } from '@mui/material';
 import { Delete, Edit, CheckBox, CheckBoxOutlineBlank } from '@mui/icons-material';
@@ -64,6 +64,13 @@ const TodoList = () => {
     const handleOpenAddModal = () => setOpenAddModal(true);
     const handleCloseAddModal = () => setOpenAddModal(false);
     const handleCloseEditModal = () => setOpenEditModal(false);
+
+    const handlePriorityChange = (id, newPriority) => {
+        setTodos(todos.map(todo =>
+            todo.id === id ? { ...todo, priority: newPriority } : todo
+        ));
+    };
+
     const filteredTodos = todos.filter(todo => {
         const priorityMatches = filterPriority === 'All' || todo.priority === filterPriority;
         const statusMatches =
@@ -196,73 +203,95 @@ const TodoList = () => {
 
                     {filteredTodos.map((todo) => (
                         <ListItem
-
                             key={todo.id}
                             dense
                             button
-                            onClick={() => toggleTodo(todo.id)}
                             sx={{
                                 borderBottom: `5px solid ${theme.palette.secondary.main}`,
-                                marginBottom:1,
-
-                                '&:last-of-type': {
-                                    borderBottom: 'none'
-                                },
+                                marginBottom: 1,
+                                '&:last-of-type': { borderBottom: 'none' },
                                 borderRadius: '10px',
                                 bgcolor: todo.completed
-                                    ? theme.palette.text.secondary // Use a consistent color for completed tasks
+                                    ? theme.palette.text.secondary
                                     : todo.priority === 'High'
-                                        ? theme.palette.error.main // Red for high-priority tasks
+                                        ? theme.palette.error.main
                                         : todo.priority === 'Medium'
-                                            ? theme.palette.warning.main // Orange for medium-priority tasks
-                                            : theme.palette.success.main, // Green for low-priority tasks
+                                            ? theme.palette.warning.main
+                                            : theme.palette.success.main,
                                 transition: 'background-color 0.3s ease',
-                                '&:hover': {
-                                    bgcolor: theme.palette.action.hover,
-                                }
+                                '&:hover': { bgcolor: theme.palette.action.hover },
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                padding: '10px', // Adjust padding as needed
                             }}
                         >
-                            <ListItemIcon>
+                            <ListItemIcon onClick={(e) => {
+                                e.stopPropagation(); // Prevent click event from propagating to ListItem
+                                toggleTodo(todo.id);
+                            }}>
                                 {todo.completed ? <CheckBox color="primary" /> : <CheckBoxOutlineBlank />}
                             </ListItemIcon>
-                            <ListItemText
-                                disableTypography
-                                sx={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                }}
-                                primary={
-                                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center',marginRight:4 }}>
-                                        <Typography variant="body1" sx={{ color: theme.palette.text.primary }}>
-                                           {todo.title} {/* Title on the left */}
-                                        </Typography>
-                                        <Typography variant="body1" sx={{ color: theme.palette.text.secondary, ml: 1 }}>
-                                            {todo.priority} Priority {/* Priority on the right */}
-                                        </Typography>
-                                    </Box>
-                                }
-                                secondary={
-                                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 1,marginRight:4 }}>
-                                        <Typography variant="body2" sx={{ color: theme.palette.text.secondary }}>
-                                            {todo.description} {/* Description on the left */}
-                                        </Typography>
-                                        <Typography variant="body2" sx={{ color: theme.palette.text.secondary, ml: 2 }}>
-                                            Due: {new Date(todo.date).toLocaleString()} {/* Due date on the right */}
-                                        </Typography>
-                                    </Box>
-                                }
-                            />
 
+                            <Box sx={{ flex: 1, display: 'flex', flexDirection: 'row', marginRight: 4, justifyContent: 'space-between' }}>
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 1 }}>
+                                    <Typography variant="body1" sx={{ color: theme.palette.text.primary }}>
+                                        {todo.title}
+                                    </Typography>
+                                    <FormControl sx={{ minWidth: 120 }}>
+                                        <FormLabel sx={{ display: 'none' }}>Priority</FormLabel>
+                                        <Select
+                                            value={todo.priority}
+                                            onChange={(e) => handlePriorityChange(todo.id, e.target.value)}
+                                            sx={{ backgroundColor: 'white', borderRadius: '8px', padding: '0 10px' }}
+                                        >
+                                            <MenuItem value="High">High</MenuItem>
+                                            <MenuItem value="Medium">Medium</MenuItem>
+                                            <MenuItem value="Low">Low</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Box>
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 
+                                    <Tooltip title={todo.description} arrow>
+                                        <Typography
+                                            variant="body2"
+                                            sx={{
+                                                color: theme.palette.text.secondary,
+                                                maxWidth: '500px', // Restrict width
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap',
+                                            }}
+                                        >
+                                            {todo.description}
+                                        </Typography>
+                                    </Tooltip>
+                                </Box>
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <Typography variant="body2" sx={{ color: theme.palette.text.secondary }}>
+                                        Due: {new Date(todo.date).toLocaleString()}
+                                    </Typography>
 
-                                <IconButton edge="end" aria-label="edit" onClick={() => startEditing(todo)}>
+                                </Box>
+                            </Box>
+
+                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                <IconButton edge="end" aria-label="edit" onClick={(e) => {
+                                    e.stopPropagation(); // Prevent click event from propagating to ListItem
+                                    startEditing(todo);
+                                }}>
                                     <Edit />
                                 </IconButton>
-                                <IconButton edge="end" aria-label="delete" onClick={() => deleteTodo(todo.id)}>
+                                <IconButton edge="end" aria-label="delete" onClick={(e) => {
+                                    e.stopPropagation(); // Prevent click event from propagating to ListItem
+                                    deleteTodo(todo.id);
+                                }}>
                                     <Delete />
                                 </IconButton>
-
+                            </Box>
                         </ListItem>
+
                     ))}
                 </List>
             </Box>
