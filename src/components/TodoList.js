@@ -102,8 +102,9 @@ const TodoList = () => {
 
 
             <Box
+                gap="4"
                 display="flex"
-                justifyContent="start"
+                justifyContent="space-between"
                 alignItems="center"
 
                 sx={{mb:2}}
@@ -113,6 +114,7 @@ const TodoList = () => {
 
                     <Button
                         sx={{
+
                             backgroundColor: theme.palette.ashBlue.main,
                             '&:hover': {
                                 backgroundColor: theme.palette.primary.dark,
@@ -131,9 +133,31 @@ const TodoList = () => {
                         Add Task
                     </Button>
 
+<Box
 
+    justifyContent="space-between"
+    sx={{
+    //
+    //     backgroundColor: theme.palette.ashBlue.main,
+    //     '&:hover': {
+    //         backgroundColor: theme.palette.primary.dark,
+    //     },
+    //
+    //
+    //
+    //     fontWeight: 600,
+    //     textTransform: 'none',
+    //     fontSize: '0.875rem',
+    //     marginRight: 2,
+    //     marginBottom: 0,
+        maxWidth:'auto',
+        gap:2,
+
+    }}
+    >
                 <FormControl
                     sx={{
+
                         margin: 0,
                         padding: 0,
                         minWidth: '120px', // Ensure the component takes only the necessary width
@@ -179,7 +203,7 @@ const TodoList = () => {
 
                     </Select>
                 </FormControl>
-
+</Box>
 
             </Box>
 
@@ -194,9 +218,9 @@ const TodoList = () => {
                     overflow: 'auto',
                   //border: `20px solid ${theme.palette.divider}`,
                     borderRadius: '10px',
+                    padding:'10px',
 
-
-                    backgroundColor: theme.palette.background.paper
+                    backgroundColor: theme.palette.quaternary.main
                 }}
             >
                 <List    sx={{   padding:0}} >
@@ -212,12 +236,8 @@ const TodoList = () => {
                                 '&:last-of-type': { borderBottom: 'none' },
                                 borderRadius: '10px',
                                 bgcolor: todo.completed
-                                    ? theme.palette.text.secondary
-                                    : todo.priority === 'High'
-                                        ? theme.palette.error.main
-                                        : todo.priority === 'Medium'
-                                            ? theme.palette.warning.main
-                                            : theme.palette.success.main,
+                                    ? theme.palette.text.secondary:theme.palette.primary.dark,
+
                                 transition: 'background-color 0.3s ease',
                                 '&:hover': { bgcolor: theme.palette.action.hover },
                                 display: 'flex',
@@ -238,18 +258,7 @@ const TodoList = () => {
                                     <Typography variant="body1" sx={{ color: theme.palette.text.primary }}>
                                         {todo.title}
                                     </Typography>
-                                    <FormControl sx={{ minWidth: 120 }}>
-                                        <FormLabel sx={{ display: 'none' }}>Priority</FormLabel>
-                                        <Select
-                                            value={todo.priority}
-                                            onChange={(e) => handlePriorityChange(todo.id, e.target.value)}
-                                            sx={{ backgroundColor: 'white', borderRadius: '8px', padding: '0 10px' }}
-                                        >
-                                            <MenuItem value="High">High</MenuItem>
-                                            <MenuItem value="Medium">Medium</MenuItem>
-                                            <MenuItem value="Low">Low</MenuItem>
-                                        </Select>
-                                    </FormControl>
+
                                 </Box>
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 
@@ -268,11 +277,29 @@ const TodoList = () => {
                                         </Typography>
                                     </Tooltip>
                                 </Box>
-                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <Box sx={{ display: 'flex',flexDirection:"column", justifyContent: 'space-between', alignItems: 'center' }}>
                                     <Typography variant="body2" sx={{ color: theme.palette.text.secondary }}>
                                         Due: {new Date(todo.date).toLocaleString()}
                                     </Typography>
-
+                                    <FormControl sx={{ display:"",minWidth: 120,marginLeft :0 ,height:12,flexDirection:"row",alignItems:"center",justifyContent:"space-between" }}>
+                                        <FormLabel sx={{ display: 'flex' }}>Priority</FormLabel>
+                                        <Select
+                                            value={todo.priority}
+                                            onChange={(e) => handlePriorityChange(todo.id, e.target.value)}
+                                            sx={{ backgroundColor: 'white', borderRadius: '8px', padding: '0 10px',height:22,
+                                                bgcolor:
+                                                    todo.priority === 'High'
+                                                        ? theme.palette.error.main
+                                                        : todo.priority === 'Medium'
+                                                            ? theme.palette.warning.main
+                                                            : theme.palette.success.main,
+                                            }}
+                                        >
+                                            <MenuItem value="High">High</MenuItem>
+                                            <MenuItem value="Medium">Medium</MenuItem>
+                                            <MenuItem value="Low">Low</MenuItem>
+                                        </Select>
+                                    </FormControl>
                                 </Box>
                             </Box>
 
