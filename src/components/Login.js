@@ -13,7 +13,7 @@ import {
     FormLabel
 } from '@mui/material';
 import { useAuth } from '../contexts/AuthContext';
-
+import theme   from "../theme";
 // Validation schema for Formik
 const validationSchema = Yup.object().shape({
     email: Yup.string().email('Invalid email format').required('Email is required'),
@@ -70,6 +70,7 @@ const Login = () => {
                     <Typography
                         component="h1"
                         variant="h5"
+
                         sx={{
                             width: '100%',
                             fontSize: 'clamp(1.75rem, 8vw, 2rem)',
@@ -121,7 +122,13 @@ const Login = () => {
 
                                 {/* Password Field */}
                                 <Box sx={{ mb: 2 }}>
-                                    <FormLabel htmlFor="password">Password</FormLabel>
+                                    <FormLabel  sx={{
+                                        color: theme.palette.ashBlue.main, // Apply tertiary color from the theme
+                                        fontWeight: 500,
+                                        fontSize: '1rem',
+                                        marginBottom: '8px',
+                                        display: 'block',
+                                    }} htmlFor="password">Password</FormLabel>
                                     <Field
                                         as={TextField}
                                         name="password"
@@ -161,7 +168,10 @@ const Login = () => {
                                     sx={{ mt: 2, mb: 2, borderRadius: '8px', padding: '10px' }}
                                     disabled={isSubmitting}
                                 >
-                                    Sign in
+                                    <Typography>
+
+                                        Sign in
+                                    </Typography>
                                 </Button>
                             </Form>
                         )}

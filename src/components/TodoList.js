@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import {
     Container, Typography, List, ListItem, ListItemText,
-    ListItemSecondaryAction, IconButton, Button, MenuItem, Box, TextField
+    ListItemSecondaryAction, IconButton,ListItemIcon, Button, Box
 } from '@mui/material';
-import { Delete, Edit, Check } from '@mui/icons-material';
+import { Delete, Edit, CheckBox, CheckBoxOutlineBlank } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 import AddTodoModal from './AddToDoModal';
 import EditTodoModal from './EditTodoModal'; // Import the new EditTodoModal
+import { useTheme } from '@mui/material/styles';
 
 const TodoList = () => {
     const [todos, setTodos] = useState([]);
@@ -15,6 +16,7 @@ const TodoList = () => {
     const [openAddModal, setOpenAddModal] = useState(false);
     const [openEditModal, setOpenEditModal] = useState(false); // State for Edit Modal
     const { logout } = useAuth();
+    const theme = useTheme();
 
     useEffect(() => {
         const storedTodos = JSON.parse(localStorage.getItem('todos')) || [];
@@ -71,28 +73,121 @@ const TodoList = () => {
                 <Typography variant="h4" component="h1">
                     Todo List
                 </Typography>
-                <Button variant="contained" onClick={handleOpenAddModal}>
-                    Add Task
-                </Button>
-                <Button variant="contained" onClick={logout}>
-                    Logout
-                </Button>
+                <Box>
+
+                    <Button
+                        variant="contained"
+                        onClick={logout}
+                    >
+                        Logout
+                    </Button>
+                </Box>
+
+            </Box>
+            <Box
+                display="flex"
+                justifyContent="start"
+                alignItems="center"
+
+                sx={{mb: 8,
+                    backgroundColor: theme.palette.background.paper}}
+            >
+
+                <Box>
+                    <Button
+                        sx={{
+                            backgroundColor: theme.palette.ashBlue.main,
+                            '&:hover': {
+                                backgroundColor: theme.palette.primary.dark,
+                            },
+                            borderRadius: '8px',
+                            padding: '10px 20px',
+                            fontWeight: 600,
+                            position: 'fixed',
+                            textTransform: 'none',
+                            fontSize: '0.875rem',
+                            marginRight: 2,
+                            marginBottom:7,
+                        }}
+                        variant="contained"
+                        onClick={handleOpenAddModal}
+                    >
+                        Add Task
+                    </Button>
+                </Box>
+
             </Box>
 
             {/* Scrollable Todo List */}
-            <Box sx={{ maxHeight: 400, overflow: 'auto', border: '1px solid #ddd', borderRadius: '4px', mt: 2 }}>
-                <List>
+
+            <Box
+                sx={{
+                    maxHeight: '80vh',
+                    overflow: 'auto',
+                  //border: `20px solid ${theme.palette.divider}`,
+                    borderRadius: '10px',
+
+
+                    backgroundColor: theme.palette.background.paper
+                }}
+            >
+                <List    sx={{   padding:4}} >
+
                     {todos.map((todo) => (
-                        <ListItem key={todo.id} dense button onClick={() => toggleTodo(todo.id)}>
+                        <ListItem
+
+                            key={todo.id}
+                            dense
+                            button
+                            onClick={() => toggleTodo(todo.id)}
+                            sx={{
+                                borderBottom: `9px solid ${theme.palette.secondary.main}`,
+                                marginTop:2,
+
+                                '&:last-of-type': {
+                                    borderBottom: 'none'
+                                },
+                                borderRadius: '10px',
+                                bgcolor: todo.completed ? theme.palette.action.disabledBackground : theme.palette.primary.main,
+                                transition: 'background-color 0.3s ease',
+                                '&:hover': {
+                                    bgcolor: theme.palette.action.hover,
+                                }
+                            }}
+                        >
+                            <ListItemIcon>
+                                {todo.completed ? <CheckBox color="primary" /> : <CheckBoxOutlineBlank />}
+                            </ListItemIcon>
                             <ListItemText
-                                primary={`${todo.title} (${todo.priority} Priority)`}
-                                secondary={`${todo.description} - Due: ${new Date(todo.date).toLocaleString()}`}
-                                style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}
+                                disableTypography
+                                sx={{
+                                    display: 'flex',              // Aligns elements in a flexible layout
+                                    flexDirection: 'column',      // Stacks vertically first
+                                }}
+                                primary={
+                                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <Typography variant="body1" sx={{ color: theme.palette.text.primary }}>
+                                           {todo.title} {/* Title on the left */}
+                                        </Typography>
+                                        <Typography variant="body1" sx={{ color: theme.palette.text.secondary, ml: 1 }}>
+                                            {todo.priority} Priority {/* Priority on the right */}
+                                        </Typography>
+                                    </Box>
+                                }
+                                secondary={
+                                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 1 }}>
+                                        <Typography variant="body2" sx={{ color: theme.palette.text.secondary }}>
+                                            {todo.description} {/* Description on the left */}
+                                        </Typography>
+                                        <Typography variant="body2" sx={{ color: theme.palette.text.secondary, ml: 2 }}>
+                                            Due: {new Date(todo.date).toLocaleString()} {/* Due date on the right */}
+                                        </Typography>
+                                    </Box>
+                                }
                             />
+
+
                             <ListItemSecondaryAction>
-                                <IconButton edge="end" aria-label="done" onClick={() => toggleTodo(todo.id)}>
-                                    <Check color={todo.completed ? "primary" : "action"} />
-                                </IconButton>
                                 <IconButton edge="end" aria-label="edit" onClick={() => startEditing(todo)}>
                                     <Edit />
                                 </IconButton>
