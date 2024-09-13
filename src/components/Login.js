@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
@@ -21,8 +21,10 @@ const validationSchema = Yup.object().shape({
 });
 
 const Login = () => {
+    const [isLogin,setLogin] = useState(true);
     const navigate = useNavigate();
     const { login } = useAuth();
+
 
     // Handle form submission
     const handleSubmit = (values, { setSubmitting }) => {
@@ -31,8 +33,10 @@ const Login = () => {
             const success = login(values);
             if (success) {
                 navigate('/');
+                setLogin(true);
             } else {
-                alert('Invalid credentials');
+             //   alert('Invalid credentials');
+                setLogin(false);
             }
             setSubmitting(false);
         }, 1000);
@@ -55,6 +59,14 @@ const Login = () => {
                         boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)'
                     }}
                 >
+                    {!isLogin && (
+                        <Typography variant="body" component="p"
+                                    sx={{
+                                        color: (theme) => theme.palette.error.main,  // Access the error color from the theme
+                                    }}>
+                            Your authentication information is incorrect. Please try again.
+                        </Typography>
+                    )}
                     <Typography
                         component="h1"
                         variant="h5"

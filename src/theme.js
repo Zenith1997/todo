@@ -13,7 +13,7 @@ const theme = createTheme({
             paper: '#FFFFFF',    // White background for paper/card elements (clean and fresh)
         },
         error: {
-            main: '#E57373',  // Soft red for error (gentle and noticeable)
+            main: '#ff2a2a',  //  red for error (noticeable)
         },
         success: {
             main: '#81C784',  // Green for success (natural and calming)
