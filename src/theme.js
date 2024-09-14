@@ -19,11 +19,12 @@ const theme = createTheme({
             main: '#9C9EAB',  // Ash blue color
         },
         background: {
-            default: '#f6a7e7',  // Very light beige for the app background
+            default: '#e3f0e9',  // Very light beige for the app background
             paper: '#FFFFFF',    // White for paper/card elements
         },
         error: {
-            main: '#F76C6C',  // Soft red for errors
+            main: '#F76C6C',
+            edit:'#0b25cc',// Soft red for errors
         },
         success: {
             main: '#8BC34A',  // Green for success
